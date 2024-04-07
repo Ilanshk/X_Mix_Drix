@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View,Image,StatusBar, TouchableOpacity ,Alert,Button} from 'react-native';
+import { StyleSheet, Text, View,Image,StatusBar, TouchableOpacity ,Alert,Button,Pressable} from 'react-native';
 
 export default function App() {
   const[currentPlayer,setCurrentPlayer] = useState("X");
@@ -25,13 +25,10 @@ export default function App() {
       if(cells[pos1] == "X" && cells[pos1] == cells[pos2] && cells[pos2] == cells[pos3]){
         Alert.alert("Congratulations!","Player X won!");
         setIsThereAwinner(true);
-        setCurrentPlayer("X");
-        
       }
       if(cells[pos1] == "O" && cells[pos1] == cells[pos2] && cells[pos2] == cells[pos3]){
         Alert.alert("Congratulations!","Player O won!");
         setIsThereAwinner(true);
-        setCurrentPlayer("X");
       }
     }
   }
@@ -61,7 +58,7 @@ export default function App() {
         <Text style={[currentPlayer == "X" && styles.xTurn, currentPlayer == "O" && styles.oTurn ]}>It is player {currentPlayer}'s turn</Text>
       </View>
       <View style={styles.firstRow}>
-        <TouchableOpacity onPress={() => {onCellClick(0)}}>
+        <Pressable onPress={() => {onCellClick(0)}}>
         {cellState[0] == "E" &&
              <Image style={styles.cell} source={require("./assets/gridCell.png")}/>
         }
@@ -71,9 +68,9 @@ export default function App() {
         {cellState[0] == "O" &&
              <Image style={styles.cell} source={require("./assets/o_image.png")}/>
         }
-        </TouchableOpacity>
+        </Pressable>
 
-        <TouchableOpacity onPress={() => {onCellClick(1)}}>
+        <Pressable onPress={() => {onCellClick(1)}}>
         {cellState[1] == "E" &&
              <Image style={styles.cell} source={require("./assets/gridCell.png")}/>
         }
@@ -83,8 +80,8 @@ export default function App() {
         {cellState[1] == "O" &&
              <Image style={styles.cell} source={require("./assets/o_image.png")}/>
         }
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => onCellClick(2)}>
+        </Pressable>
+        <Pressable onPress={() => onCellClick(2)}>
         {cellState[2] == "E" &&
           <Image style={styles.cell} source={require("./assets/gridCell.png")}/>
         }
@@ -94,11 +91,11 @@ export default function App() {
         {cellState[2] == "O" &&
           <Image style={styles.cell} source={require("./assets/o_image.png")}/>
         }
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View style={styles.secondRow}>
-        <TouchableOpacity onPress={() => {onCellClick(3)}}>
+        <Pressable onPress={() => {onCellClick(3)}}>
         {cellState[3] == "E" &&
           <Image style={styles.cell} source={require("./assets/gridCell.png")}/>
         }
@@ -108,8 +105,8 @@ export default function App() {
         {cellState[3] == "O" &&
           <Image style={styles.cell} source={require("./assets/o_image.png")}/>
         }
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {onCellClick(4)}}>
+        </Pressable>
+        <Pressable onPress={() => {onCellClick(4)}}>
         {cellState[4] == "E" &&
           <Image style={styles.cell} source={require("./assets/gridCell.png")}/>
         }
@@ -119,8 +116,8 @@ export default function App() {
         {cellState[4] == "O" &&
           <Image style={styles.cell} source={require("./assets/o_image.png")}/>
         }
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {onCellClick(5)}}>
+        </Pressable>
+        <Pressable onPress={() => {onCellClick(5)}}>
         {cellState[5] == "E" &&
           <Image style={styles.cell} source={require("./assets/gridCell.png")}/>
         }
@@ -130,11 +127,11 @@ export default function App() {
         {cellState[5] == "O" &&
           <Image style={styles.cell} source={require("./assets/o_image.png")}/>
         }
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View style={styles.thirdRow}>
-        <TouchableOpacity onPress={() => {onCellClick(6)}}>
+        <Pressable onPress={() => {onCellClick(6)}}>
         {cellState[6] == "E" &&
           <Image style={styles.cell} source={require("./assets/gridCell.png")}/>
         }
@@ -144,8 +141,8 @@ export default function App() {
         {cellState[6] == "O" &&
           <Image style={styles.cell} source={require("./assets/o_image.png")}/>
         }
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {onCellClick(7)}}>
+        </Pressable>
+        <Pressable onPress={() => {onCellClick(7)}}>
         {cellState[7] == "E" &&
           <Image style={styles.cell} source={require("./assets/gridCell.png")}/>
         }
@@ -155,8 +152,8 @@ export default function App() {
         {cellState[7] == "O" &&
           <Image style={styles.cell} source={require("./assets/o_image.png")}/>
         }
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {onCellClick(8)}}>
+        </Pressable>
+        <Pressable onPress={() => {onCellClick(8)}}>
         {cellState[8] == "E" &&
           <Image style={styles.cell} source={require("./assets/gridCell.png")}/>
         }
@@ -166,13 +163,14 @@ export default function App() {
         {cellState[8] == "O" &&
           <Image style={styles.cell} source={require("./assets/o_image.png")}/>
         }
-        </TouchableOpacity>
+        </Pressable>
       </View>
       {isThereAwinner &&
         <Button onPress = {
           () => {
             setCellState(["E","E","E","E","E","E","E","E","E"]);
             setIsThereAwinner(false);
+            setCurrentPlayer("X");
           }
         }
           title= "Play Again"
@@ -213,7 +211,7 @@ const styles = StyleSheet.create({
   heading:{
     alignSelf:'center',
     padding:10,
-    fontSize: 20,
+    fontSize: 50,
     fontWeight: '700',
   },
   xTurn:{
