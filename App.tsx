@@ -1,13 +1,47 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View,Image,StatusBar, TouchableOpacity ,Alert,Button} from 'react-native';
 
 export default function App() {
   const[currentPlayer,setCurrentPlayer] = useState("X");
-  //const[isCellClicked,setIsCellClicked] = useState(false);
   const[cellState,setCellState] = useState(["E","E","E","E","E","E","E","E","E"]);
-    console.log(cellState);
+  const[isThereAwinner,setIsThereAwinner] = useState(false); 
+
+
+  const checkForWinner = (cells: string[]) =>{
+    console.log("Checking Winner");
+    
+    const winnerSequence = [
+      [0,1,2],
+      [3,4,5],
+      [6,7,8],
+      [0,3,6],
+      [1,4,7],
+      [2,5,8],
+      [0,4,8],
+      [2,4,6]
+    ]
+    for(let i = 0;i<winnerSequence.length;i++){
+      const [pos1,pos2,pos3] = winnerSequence[i];
+      if(cells[pos1] == "X" && cells[pos1] == cells[pos2] && cells[pos2] == cells[pos3]){
+        Alert.alert("Congratulations!","Player X won!");
+        setIsThereAwinner(true);
+        setCurrentPlayer("X");
+        
+      }
+      if(cells[pos1] == "O" && cells[pos1] == cells[pos2] && cells[pos2] == cells[pos3]){
+        Alert.alert("Congratulations!","Player O won!");
+        setIsThereAwinner(true);
+        setCurrentPlayer("X");
+      }
+    }
+  }
 
   const onCellClick = (index:number) =>{
+     
+   if(cellState[index] != "E"){
+      Alert.alert("Space is occupied");
+    }
+    
     let currentCellsState = [...cellState];
     if(currentCellsState[index] === "E"){
       currentCellsState[index] = currentPlayer=="X" ?"X":"O";
@@ -15,17 +49,16 @@ export default function App() {
       setCurrentPlayer(currentPlayer == "O"?"X":"O");
       console.log(currentCellsState);
     }
-    
-    // if(currentCellsState[index] != "E"){
-    //   Alert.alert("Space is occupied");
-    // }
   }
-
+  useEffect(()=>
+     checkForWinner(cellState)
+  ,[cellState]);
+  
   return (
     <View style={styles.container}>
       <Text style = {styles.heading}>X Mix Drix</Text>
       <View>
-        <Text style={styles.guide}>It is player {currentPlayer}'s turn</Text>
+        <Text style={[currentPlayer == "X" && styles.xTurn, currentPlayer == "O" && styles.oTurn ]}>It is player {currentPlayer}'s turn</Text>
       </View>
       <View style={styles.firstRow}>
         <TouchableOpacity onPress={() => {onCellClick(0)}}>
@@ -52,7 +85,6 @@ export default function App() {
         }
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onCellClick(2)}>
-          {/* <Image style={styles.cell}source={require("./assets/gridCell.png")}/> */}
         {cellState[2] == "E" &&
           <Image style={styles.cell} source={require("./assets/gridCell.png")}/>
         }
@@ -136,11 +168,17 @@ export default function App() {
         }
         </TouchableOpacity>
       </View>
-      <Button
-        title = "Restart"
-        onPress = {() => setCellState(["E","E","E","E","E","E","E","E","E"])}
-      >
-      </Button>
+      {isThereAwinner &&
+        <Button onPress = {
+          () => {
+            setCellState(["E","E","E","E","E","E","E","E","E"]);
+            setIsThereAwinner(false);
+          }
+        }
+          title= "Play Again"
+        >
+        </Button>
+      }
     </View>
   );
 }
@@ -152,22 +190,19 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     marginTop:StatusBar.currentHeight,
     flexDirection:'column',
+    backgroundColor:'#21c49e'
   },
   firstRow:{
     flexDirection:'row',
     justifyContent:'space-evenly',
-    // flex:1
   },
   secondRow:{
     flexDirection:'row',
     justifyContent:'space-evenly',
-    // flex:1
   },
   thirdRow:{
     flexDirection:'row',
     justifyContent:'space-evenly',
-    // flex:1
-
   },
   cell:{
    borderWidth:3,
@@ -178,21 +213,24 @@ const styles = StyleSheet.create({
   heading:{
     alignSelf:'center',
     padding:10,
-    fontSize: 20
+    fontSize: 20,
+    fontWeight: '700',
   },
-  guide:{
+  xTurn:{
     alignSelf:'center',
-    backgroundColor:'blue',
+    backgroundColor:'#db2c52',
     fontSize:30,
     marginHorizontal:20,
-    paddingVertical:20
-
+    paddingVertical:20,
+    marginBottom:5
   },
-  image:{
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center',
-    resizeMode:'contain'
+  oTurn:{
+    alignSelf:'center',
+    backgroundColor:'#17a4e6',
+    fontSize:30,
+    marginHorizontal:20,
+    paddingVertical:20,
+    marginBottom:5
   }
   
 });
